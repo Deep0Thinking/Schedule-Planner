@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>Schedule Planner</title>
+    <!-- CSS file -->
+    <link rel="stylesheet" href="/static/styles.css" />
+  </head>
+  <body>
+    <header>
+      <h1>Schedule Planner</h1>
+      <p class="subtitle">XXX University</p>
+    </header>
+
+    <section class="content">
+      <form id="coursesForm">
+        <div id="coursesContainer"></div>
+        <div id="unitsDisplay">Total Units: 0</div>
+        <br>
+        <button type="submit" class="btn">Generate Schedules</button>
+      </form>
+    </section>
+
+    <hr />
+
+    <section class="results">
+      <!-- Display collapsible schedules -->
+      <button id="toggleAllBtn" class="toggle-all-btn">Show All Full Schedules</button>
+      <span id="scheduleCountSpan" style="margin-left: 10px; font-weight: bold;"></span>
+
+      <div id="scheduleResults"></div>
+    </section>
+
+    <!-- JS file -->
+    <script src="/static/scripts.js"></script>
+  </body>
+</html>

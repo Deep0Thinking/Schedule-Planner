@@ -1,0 +1,116 @@
+[
+  {
+    "courseName": "MATH 010",
+    "Unit": 4.0,
+    "Title": "Calculus I - Fundamentals",
+    "GradeMode": "Letter",
+    "Description": "Introductory calculus for science/engineering majors.",
+
+    "sections": [
+      {
+        "Status": "OPEN",
+        "Type": "L",
+        "CRN": 62533,
+        "Meet": "Lecture",
+        "MeetingTime": [
+          { "day": "M", "start": 550, "end": 600, "location": "R302" },
+          { "day": "W", "start": 550, "end": 600, "location": "R302" }
+        ],
+        "Cap": 30,
+        "Act": 25,
+        "Rem": 5,
+        "Instructor": "John Smith",
+        "StartDate": "2025/02/18",
+        "EndDate": "2025/06/15",
+        "Weeks": 0
+      },
+      {
+        "Status": "WAITLISTED",
+        "Type": "OD",
+        "CRN": 70001,
+        "Meet": "DE Online Lecture",
+        "MeetingTime": [
+          { "day": "W", "start": 600, "end": 660, "location": "Online" }
+        ],
+        "Cap": 30,
+        "Act": 30,
+        "Rem": 0,
+        "Instructor": "Jane Doe",
+        "StartDate": "2025/02/18",
+        "EndDate": "2025/06/15",
+        "Weeks": 0
+      }
+    ]
+  },
+  {
+    "courseName": "CS 200",
+    "Unit": 3.0,
+    "Title": "Computer Science Lab",
+    "GradeMode": "Letter",
+    "Description": "Lab course for advanced programming topics",
+
+    "sections": [
+      {
+        "Status": "CLOSED",
+        "Type": "LL",
+        "CRN": 64200,
+        "Meet": "Lab",
+        "MeetingTime": [
+          { "day": "T", "start": 590, "end": 620, "location": "R101" },
+          { "day": "R", "start": 590, "end": 620, "location": "R101" }
+        ],
+        "Cap": 20,
+        "Act": 20,
+        "Rem": 0,
+        "Instructor": "Dr. Green",
+        "StartDate": "2025/02/18",
+        "EndDate": "2025/06/15",
+        "Weeks": 0
+      },
+      {
+        "Status": "OPEN",
+        "Type": "B",
+        "CRN": 64201,
+        "Meet": "Lab",
+        "MeetingTime": [
+          { "day": "M", "start": 620, "end": 680, "location": "R110" },
+          { "day": "F", "start": 700, "end": 760, "location": "R110" }
+        ],
+        "Cap": 25,
+        "Act": 15,
+        "Rem": 10,
+        "Instructor": "Dr. Blue",
+        "StartDate": "2025/02/18",
+        "EndDate": "2025/06/15",
+        "Weeks": 0
+      }
+    ]
+  },
+  {
+    "courseName": "ENGL 101",
+    "Unit": 3.0,
+    "Title": "English Composition",
+    "GradeMode": "Letter",
+    "Description": "Introduction to college-level writing and research.",
+
+    "sections": [
+      {
+        "Status": "OPEN",
+        "Type": "L",
+        "CRN": 65000,
+        "Meet": "Lecture",
+        "MeetingTime": [
+          { "day": "M", "start": 540, "end": 600, "location": "R201" },
+          { "day": "W", "start": 540, "end": 600, "location": "R201" }
+        ],
+        "Cap": 30,
+        "Act": 28,
+        "Rem": 2,
+        "Instructor": "Prof. White",
+        "StartDate": "2025/02/18",
+        "EndDate": "2025/06/15",
+        "Weeks": 0
+      }
+    ]
+  }
+]
