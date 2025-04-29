@@ -3,7 +3,7 @@
 Exhaustively enumerates all conflict-free course schedules.
 
 Input  (UI)  :: [{"courseName": str, "sections": [CRN, …]}, …]
-Catalog req :: each section owns
+Catalog req  :: each section owns
                  MeetingTime → [{"day": str, "start": int, "end": int}]
 Output       :: [[section, …], …] — each inner list is one valid timetable
                  with section["courseName"] injected.
