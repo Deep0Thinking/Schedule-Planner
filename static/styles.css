@@ -360,3 +360,36 @@ hr {
   width: 40px; 
   text-align: center;
 }
+
+/* ------- Modern filter bar -------- */
+.section-filters{
+  display:flex;
+  gap:.65rem;
+  flex-wrap:wrap;
+  padding:.6rem .8rem;
+  background:#f5f7fa;
+  border:1px solid #e2e6ec;
+  border-radius:8px;
+  box-shadow:0 1px 3px rgba(0,0,0,.06);
+  margin-bottom:1rem;
+}
+
+.section-filters input[type="text"],
+.section-filters select{
+  flex:1 1 180px;
+  padding:.5rem .9rem;
+  border:1px solid #c8cdd4;
+  border-radius:6px;
+  font-size:.9rem;
+  background:#fff;
+  transition:border-color .2s ease, box-shadow .2s ease;
+}
+
+.section-filters input[type="text"]::placeholder{color:#8a8f97;}
+
+.section-filters input[type="text"]:focus,
+.section-filters select:focus{
+  outline:none;
+  border-color:#4d90fe;
+  box-shadow:0 0 0 3px rgba(77,144,254,.18);
+}

@@ -124,81 +124,108 @@ form.addEventListener("submit", async e => {
 
 // ===== Popup: pick sections within one course =====
 function showCourseSectionsPopup(course) {
-  const overlay = document.createElement("div");
-  overlay.classList.add("popup-overlay");
+  // overlay + shell
+  const overlay = Object.assign(document.createElement("div"), { className: "popup-overlay" });
+  const popup   = Object.assign(document.createElement("div"), { className: "course-sections-popup" });
+  popup.innerHTML = `<h2>${course.courseName}</h2>
+    <p><strong>Title:</strong> ${course.Title||""}<br><strong>Units:</strong> ${course.Unit||""}<br>
+    <strong>Grade Mode:</strong> ${course.GradeMode||""}<br><strong>Description:</strong> ${course.Description||""}</p><hr>`;
 
-  const popup = document.createElement("div");
-  popup.classList.add("course-sections-popup");
+  // filter bar
+  const controls = document.createElement("div");
+  controls.className = "section-filters";
+  controls.innerHTML = `
+    <input id="sectionSearch" type="text" placeholder="🔍 Search…" />
+    <select id="statusFilter">
+      <option value="">All Statuses</option>
+      <option value="OPEN">OPEN</option>
+      <option value="WAITLISTED">WAITLISTED</option>
+      <option value="CLOSED">CLOSED</option>
+      <option value="SEE INSTRUCTOR">SEE INSTRUCTOR</option>
+    </select>
+    <select id="meetFilter"></select>`;
+  popup.appendChild(controls);
 
-  popup.innerHTML = `<h2>${course.courseName}</h2>`;
-  popup.insertAdjacentHTML("beforeend",
-    `<p><strong>Title:</strong> ${course.Title || ""}<br>
-       <strong>Units:</strong> ${course.Unit || ""}<br>
-       <strong>Grade Mode:</strong> ${course.GradeMode || ""}<br>
-       <strong>Description:</strong> ${course.Description || ""}</p><hr>`);
+  // meet dropdown
+  const meetFilter = controls.querySelector("#meetFilter");
+  meetFilter.innerHTML = `<option value="">All Meeting Types</option>` +
+    [...new Set(course.sections.map(s => s.Meet))].sort()
+      .map(m => `<option value="${m}">${m}</option>`).join("");
 
-  // --- sections table ---
+  // table scaffold + header master-checkbox
   const table = document.createElement("table");
-  table.classList.add("sections-table");
-  table.innerHTML =
-    `<thead><tr><th></th><th>CRN</th><th>Status</th><th>Seats</th><th>Instructor</th><th>Meet</th></tr></thead>`;
+  table.className = "sections-table";
+  table.innerHTML = `
+    <thead><tr>
+      <th><input id="masterCheck" type="checkbox" checked /></th>
+      <th>CRN</th><th>Status</th><th>Seats</th><th>Instructor</th><th>Meet</th>
+    </tr></thead>`;
+  const masterCB = table.querySelector("#masterCheck");
   const tbody = document.createElement("tbody");
-
-  course.sections.forEach(sec => {
-    const tr = document.createElement("tr");
-
-    // Checkbox (disabled if CLOSED)
-    const tdCheck = document.createElement("td");
-    const cb = document.createElement("input");
-    cb.type = "checkbox";
-    if (sec.Status?.toUpperCase() === "CLOSED") {
-      cb.disabled = true;
-      cb.checked  = false;
-      sectionSelectionState[sec.CRN] = false; // safety
-    } else {
-      cb.checked = !!sectionSelectionState[sec.CRN];
-      cb.addEventListener("change", () => {
-        sectionSelectionState[sec.CRN] = cb.checked;
-      });
-    }
-    tdCheck.appendChild(cb);
-    tr.appendChild(tdCheck);
-
-    // CRN
-    tr.appendChild(Object.assign(document.createElement("td"), { textContent: sec.CRN }));
-
-    // Status (color‑coded)
-    const statusTd = document.createElement("td");
-    statusTd.innerHTML = `<span style="color:${getStatusColor(sec.Status)};font-weight:600;">${sec.Status}</span>`;
-    tr.appendChild(statusTd);
-
-    // Seats (color‑coded)
-    const seatsTd = document.createElement("td");
-    seatsTd.innerHTML = `<span style="color:${getRemainingColor(sec.Rem)};">${sec.Act}/${sec.Cap} (Rem: ${sec.Rem})</span>`;
-    tr.appendChild(seatsTd);
-
-    tr.appendChild(Object.assign(document.createElement("td"), { textContent: sec.Instructor }));
-    tr.appendChild(Object.assign(document.createElement("td"), { textContent: sec.Meet }));
-
-    tbody.appendChild(tr);
-  });
-
   table.appendChild(tbody);
   popup.appendChild(table);
 
-  // Close btn
+  // draw tbody rows
+  const render = () => {
+    const q  = controls.querySelector("#sectionSearch").value.trim().toLowerCase();
+    const st = controls.querySelector("#statusFilter").value;
+    const mt = controls.querySelector("#meetFilter").value;
+    tbody.textContent = "";
+    const visible = [];
+    course.sections.forEach(sec => {
+      if (st && sec.Status?.toUpperCase() !== st) return;
+      if (mt && sec.Meet !== mt) return;
+      if (q && ![sec.CRN, sec.Instructor, sec.Meet, sec.Status].join(" ").toLowerCase().includes(q)) return;
+      visible.push(sec);
+      const tr = document.createElement("tr");
+      const tdCheck = document.createElement("td");
+      const cb = Object.assign(document.createElement("input"), { type: "checkbox" });
+      if (sec.Status?.toUpperCase() === "CLOSED") {
+        cb.disabled = true; cb.checked = false; sectionSelectionState[sec.CRN] = false;
+      } else {
+        cb.checked = !!sectionSelectionState[sec.CRN];
+        cb.onchange = () => { sectionSelectionState[sec.CRN] = cb.checked; updateMaster(); };
+      }
+      tdCheck.appendChild(cb); tr.appendChild(tdCheck);
+      tr.appendChild(Object.assign(document.createElement("td"), { textContent: sec.CRN }));
+      const stTd = document.createElement("td");
+      stTd.innerHTML = `<span style="color:${getStatusColor(sec.Status)};font-weight:600;">${sec.Status}</span>`;
+      tr.appendChild(stTd);
+      const seatTd = document.createElement("td");
+      seatTd.innerHTML = `<span style="color:${getRemainingColor(sec.Rem)};">${sec.Act}/${sec.Cap} (Rem: ${sec.Rem})</span>`;
+      tr.appendChild(seatTd);
+      tr.appendChild(Object.assign(document.createElement("td"), { textContent: sec.Instructor }));
+      tr.appendChild(Object.assign(document.createElement("td"), { textContent: sec.Meet }));
+      tbody.appendChild(tr);
+    });
+    updateMaster(); // sync master checkbox after paint
+    function updateMaster() {
+      const boxes = [...tbody.querySelectorAll('input[type="checkbox"]:not([disabled])')];
+      masterCB.indeterminate = boxes.some(b => b.checked) && boxes.some(b => !b.checked);
+      masterCB.checked = boxes.length && boxes.every(b => b.checked);
+    }
+  };
+
+  // master-checkbox handler
+  masterCB.onchange = () => {
+    const boxes = [...tbody.querySelectorAll('input[type="checkbox"]:not([disabled])')];
+    boxes.forEach(b => { b.checked = masterCB.checked; const crn = b.closest('tr').children[1].textContent; sectionSelectionState[crn] = masterCB.checked; });
+  };
+
+  render();
+  controls.addEventListener("input", render);
+  controls.addEventListener("change", render);
+
+  // close button
   const closeBtn = document.createElement("button");
   closeBtn.textContent = "Close";
-  closeBtn.addEventListener("click", () => {
-    updateCourseCheckboxesFromSections();
-    updateTotalUnits();
-    document.body.removeChild(overlay);
-  });
+  closeBtn.onclick = () => { updateCourseCheckboxesFromSections(); updateTotalUnits(); document.body.removeChild(overlay); };
   popup.appendChild(closeBtn);
 
   overlay.appendChild(popup);
   document.body.appendChild(overlay);
 }
+
 
 // Sync course checkboxes after section picker closes
 function updateCourseCheckboxesFromSections() {
