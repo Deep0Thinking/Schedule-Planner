@@ -25,9 +25,20 @@
 
     <section class="results">
       <!-- Display collapsible schedules -->
+      <div id="results-controls" style="margin-bottom: 1em; display: none;">
+        <label for="sort-select">Sort by:</label>
+        <select id="sort-select">
+          <option value="default">Default</option>
+          <option value="gaps-asc">Fewest Gaps Between Classes</option>
+          <option value="compact-asc">Most Compact Days</option>
+          <option value="start-desc">Latest Start Time</option>
+          <option value="end-asc">Earliest End Time</option>
+        </select>
+        <button id="sort-direction-btn" title="Toggle sort direction">↑</button>
+      </div>
+
       <button id="toggleAllBtn" class="toggle-all-btn">Show All Full Schedules</button>
       <span id="scheduleCountSpan" style="margin-left: 10px; font-weight: bold;"></span>
-
       <div id="scheduleResults"></div>
     </section>
 

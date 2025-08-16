@@ -1,4 +1,4 @@
-/* Base page styling */
+/* General page styles */
 body {
   margin: 0;
   font-family: "Segoe UI", Tahoma, sans-serif;
@@ -6,7 +6,7 @@ body {
   color: #333;
 }
 
-/* Header styling */
+/* Page header */
 header {
   background-color: #4d90fe;
   color: #fff;
@@ -21,13 +21,13 @@ header h1 {
   font-weight: 400;
 }
 
-/* Main content sections */
+/* Main content containers */
 .content,
 .results {
   padding: 1rem;
 }
 
-/* Subtle horizontal rule */
+/* Horizontal rule */
 hr {
   border: none;
   height: 1px;
@@ -35,10 +35,7 @@ hr {
   margin: 0;
 }
 
-/* =============== */
-/* BUTTON STYLES   */
-/* =============== */
-
+/* Button Styles */
 .btn,
 .toggle-all-btn,
 .toggle-btn,
@@ -54,49 +51,46 @@ hr {
   color: #fff;
   transition: background-color 0.2s, transform 0.2s;
   margin-top: 1rem;
+  vertical-align: middle;
 }
 
-/* "Generate Schedules" button => .btn */
+/* Primary action button */
 .btn {
-  background-color: #4d90fe; /* Blue */
+  background-color: #4d90fe;
 }
 .btn:hover {
-  background-color: #357ae8; /* Darker blue */
+  background-color: #357ae8;
   transform: scale(1.03);
 }
 
-/* "Show All Full Schedules" => .toggle-all-btn */
+/* Master toggle button */
 .toggle-all-btn {
-  background-color: #2C9C76; /* Teal-green */
+  background-color: #2C9C76;
 }
 .toggle-all-btn:hover {
   background-color: #237658;
   transform: scale(1.03);
 }
 
-/* The per-schedule "Show Full Schedule"/"Show Preview" => .toggle-btn */
+/* Individual schedule toggle */
 .toggle-btn {
-  font-size: 0.9rem; /* Slightly smaller */
-  background-color: #666; /* Gray */
-  margin-top: 0; /* Usually in a header row, so no big margin */
+  font-size: 0.9rem;
+  background-color: #666;
+  margin-top: 0;
 }
 .toggle-btn:hover {
   background-color: #444;
   transform: scale(1.03);
 }
 
-/* The popup "Close" button => .course-popup button, .course-sections-popup button */
+/* Popup close buttons */
 .course-popup button:hover,
 .course-sections-popup button:hover {
   background-color: #357ae8;
   transform: scale(1.03);
 }
 
-/* =============== */
-/* COURSE CARDS    */
-/* =============== */
-
-/* Container for the course "cards" */
+/* Course Selection Cards */
 #coursesContainer {
   display: flex;
   flex-wrap: wrap;
@@ -104,7 +98,7 @@ hr {
   margin-bottom: 1rem;
 }
 
-/* Each label acts like a "card" for the checkbox + course name */
+/* Each label acts as a styled card */
 #coursesContainer label {
   display: flex;
   align-items: center;
@@ -115,25 +109,21 @@ hr {
   min-width: 200px;
   box-shadow: 0 1px 3px rgba(0,0,0,0.1);
   transition: box-shadow 0.2s, transform 0.2s;
-  background-color: #fff; /* We'll override with !important below for color classes */
-  position: relative;      /* So we can place the info icon if desired */
+  background-color: #fff;
+  position: relative;
 }
-
-/* The checkbox itself */
 #coursesContainer label input[type="checkbox"] {
   margin-right: 0.5rem;
   transform: scale(1.2);
 }
-
-/* Hover effect for the "card" */
 #coursesContainer label:hover {
   box-shadow: 0 3px 8px rgba(0,0,0,0.15);
   transform: scale(1.02);
 }
 
-/* Info icon inside the course label */
+/* Info icon inside the course card */
 .info-icon {
-  margin-left: auto; /* pushes it to the right edge */
+  margin-left: auto; /* Pushes icon to the right edge */
   font-size: 1.2rem;
   color: #333;
   margin-right: 0; 
@@ -141,9 +131,7 @@ hr {
   padding-left: 0.5rem;
 }
 
-/* =============== */
-/* TOTAL UNITS BADGE */
-/* =============== */
+/* Total Units Display */
 #unitsDisplay {
   display: inline-block;
   background-color: #fff;
@@ -156,9 +144,53 @@ hr {
   color: #444;
 }
 
-/* =============== */
-/* SCHEDULE BLOCKS */
-/* =============== */
+/* Results Section Controls */
+#results-controls {
+  display: inline-flex;
+  align-items: center;
+  vertical-align: middle;
+  margin-right: 1rem;
+}
+#results-controls label {
+  margin-right: 0.5rem;
+  font-weight: 600;
+  color: #555;
+  font-size: 0.95rem;
+}
+#sort-select {
+  background-color: #fff;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  padding: 0.5rem 0.8rem;
+  font-size: 0.9rem;
+  font-family: inherit;
+  color: #333;
+  cursor: pointer;
+  transition: border-color .2s ease, box-shadow .2s ease;
+}
+#sort-select:focus {
+  outline: none;
+  border-color: #4d90fe;
+  box-shadow: 0 0 0 3px rgba(77,144,254,.18);
+}
+#sort-direction-btn {
+  background: #fff;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 1rem;
+  padding: 0.35rem 0.6rem;
+  margin-left: 0.5rem;
+  line-height: 1;
+  color: #333;
+  transition: background-color 0.2s, border-color 0.2s;
+}
+#sort-direction-btn:hover {
+  background-color: #f0f0f0;
+  border-color: #bbb;
+}
+
+/* Generated Schedule Results */
 .schedule-block {
   display: inline-block;
   vertical-align: top;
@@ -170,7 +202,7 @@ hr {
   position: relative;
 }
 
-/* Title row: h2 + show/hide button */
+/* Schedule block header */
 .schedule-header {
   display: flex;
   justify-content: space-between;
@@ -180,7 +212,7 @@ hr {
   margin: 0;
 }
 
-/* Collapsible container */
+/* Utility class to hide elements */
 .hidden {
   display: none;
 }
@@ -211,13 +243,12 @@ hr {
   white-space: nowrap;
 }
 
-/* The colored course block inside a table cell */
+/* Course meeting time block */
 .course-block {
   width: 100%;
   border: 1px solid #aaa;
   box-sizing: border-box;
   position: absolute;
-  /* top: 0; */
   left: 0;
   opacity: 0.9;
   display: flex;
@@ -236,7 +267,7 @@ hr {
   cursor: pointer;
 }
 
-/* Distinct color classes for course blocks & labels (override with !important). */
+/* Course colors (applied to cards and schedule blocks) */
 .course-color-0 { background-color: #FF9999 !important; }
 .course-color-1 { background-color: #FFCC99 !important; }
 .course-color-2 { background-color: #FFFF99 !important; }
@@ -248,14 +279,12 @@ hr {
 .course-color-8 { background-color: #9999FF !important; }
 .course-color-9 { background-color: #CC99FF !important; }
 
-/* Smaller preview table label */
+/* Preview table styles */
 .preview-grid-label {
   font-size: 0.8rem;
   margin-top: 0.3rem;
   color: #666;
 }
-
-/* Smaller table for preview */
 .preview-table {
   border-collapse: collapse;
   margin-top: 0.3rem;
@@ -275,7 +304,7 @@ hr {
   font-weight: 600;
 }
 
-/* Popup overlays */
+/* Popup Modals */
 .popup-overlay {
   position: fixed;
   top: 0;
@@ -298,9 +327,7 @@ hr {
   max-width: 90%;
   z-index: 9999;
 }
-.course-popup h3 {
-  margin-top: 0;
-}
+.course-popup h3,
 .course-sections-popup h2 {
   margin-top: 0;
 }
@@ -311,18 +338,7 @@ hr {
   margin-top: 1rem;
 }
 
-/* The list of section checkboxes in the popup */
-.sections-list {
-  margin-top: 0.5rem;
-  margin-left: 1rem;
-}
-.sections-list label {
-  display: block;
-  margin-bottom: 0.3rem;
-  cursor: pointer;
-}
-
-/* Table inside the popup with sections */
+/* Section selection table inside popup */
 .sections-table {
   width: 100%;
   border-collapse: collapse;
@@ -330,8 +346,6 @@ hr {
   box-shadow: 0 1px 3px rgba(0,0,0,0.1);
   font-size: 0.95rem;
 }
-
-/* Table header style */
 .sections-table thead {
   background-color: #f8f8f8;
 }
@@ -341,27 +355,21 @@ hr {
   padding: 0.6rem 1rem;
   border-bottom: 2px solid #ddd;
 }
-
-/* Table cells style */
 .sections-table td {
   padding: 0.6rem 1rem;
   border-bottom: 1px solid #ddd;
   vertical-align: middle;
 }
-
-/* Hover effect for rows */
 .sections-table tbody tr:hover {
   background-color: #f3f3f3;
 }
-
-/* Make the checkbox column narrower */
 .sections-table td:first-child,
 .sections-table th:first-child {
   width: 40px; 
   text-align: center;
 }
 
-/* ------- Modern filter bar -------- */
+/* Section Popup Filter Bar */
 .section-filters{
   display:flex;
   gap:.65rem;
@@ -373,7 +381,6 @@ hr {
   box-shadow:0 1px 3px rgba(0,0,0,.06);
   margin-bottom:1rem;
 }
-
 .section-filters input[type="text"],
 .section-filters select{
   flex:1 1 180px;
@@ -384,9 +391,7 @@ hr {
   background:#fff;
   transition:border-color .2s ease, box-shadow .2s ease;
 }
-
 .section-filters input[type="text"]::placeholder{color:#8a8f97;}
-
 .section-filters input[type="text"]:focus,
 .section-filters select:focus{
   outline:none;

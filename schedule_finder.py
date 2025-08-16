@@ -1,42 +1,18 @@
-"""schedule_finder.py
-
-Exhaustively enumerates all conflict-free course schedules.
-
-Input  (UI)  :: [{"courseName": str, "sections": [CRN, …]}, …]
-Catalog req  :: each section owns
-                 MeetingTime → [{"day": str, "start": int, "end": int}]
-Output       :: [[section, …], …] — each inner list is one valid timetable
-                 with section["courseName"] injected.
-
-Algorithm: depth-first search over the Cartesian product of the selected
-sections, backtracking immediately upon the first time clash (minute precision).
-"""
+# schedule_finder.py
+# Exhaustively enumerates all conflict-free course schedules using a backtracking DFS.
 
 from typing import List, Dict, Any, Tuple
 
 __all__ = ["generate_schedules_for_chosen_courses", "section_conflicts"]
 
-# -------- Public API -------- #
 
 def generate_schedules_for_chosen_courses(
     all_courses: List[Dict[str, Any]],
     chosen_info: List[Dict[str, Any]],
 ) -> List[List[Dict[str, Any]]]:
-    """Return every clash-free schedule derived from *chosen_info*.
+    # Return every clash-free schedule derived from the user's chosen sections.
 
-    Parameters
-    ----------
-    all_courses : full catalog as served by /api/courses
-    chosen_info : UI payload containing only the CRNs kept checked
-
-    Returns
-    -------
-    list[list[dict]]
-        Each inner list represents one schedule; every section dict is
-        augmented with the key ``courseName``.
-    """
-
-    # Build [(courseName, [candidate section, …]), …] restricted to chosen CRNs.
+    # Aggregate the selected sections, grouped by course name.
     per_course: List[Tuple[str, List[Dict[str, Any]]]] = []
 
     for entry in chosen_info:
@@ -45,7 +21,7 @@ def generate_schedules_for_chosen_courses(
 
         course = next((c for c in all_courses if c["courseName"] == name), None)
         if not course:
-            continue  # ignore stale or misspelled names
+            continue  # Ignore stale or misspelled course names from the request.
 
         picked: List[Dict[str, Any]] = []
         for sec in course["sections"]:
@@ -57,20 +33,21 @@ def generate_schedules_for_chosen_courses(
     if not per_course:
         return []
 
-    # -------- depth-first search over Cartesian product --------
-    schedules: List[List[Dict[str, Any]]] = []
-    stack: List[Tuple[str, Dict[str, Any]]] = []  # partial (courseName, section)
+    schedules: List[List[Dict[str, Any]]] = []  # Final list of valid schedules.
+    stack: List[Tuple[str, Dict[str, Any]]] = []  # The current path (partial schedule) in the DFS traversal.
 
     def dfs(i: int) -> None:
+        # Recursive DFS helper to explore schedule combinations.
         if i == len(per_course):
-            # completed choice → commit one schedule
+            # Base case: a valid schedule is found, add it to the results.
             schedules.append([dict(sec, courseName=name) for name, sec in stack])
             return
 
         course_name, options = per_course[i]
         for sec in options:
+            # Prune this search branch if the new section conflicts with the current path.
             if any(section_conflicts(sec, chosen) for _, chosen in stack):
-                continue  # clash — prune branch
+                continue
             stack.append((course_name, sec))
             dfs(i + 1)
             stack.pop()
@@ -78,10 +55,9 @@ def generate_schedules_for_chosen_courses(
     dfs(0)
     return schedules
 
-# -------- Helper -------- #
 
 def section_conflicts(a: Dict[str, Any], b: Dict[str, Any]) -> bool:
-    """True if sections *a* and *b* overlap on the same day (minute-granular)."""
+    # Determines if two sections have any time overlap on any given day.
     for da, sa, ea in a["times"]:
         for db, sb, eb in b["times"]:
             if da == db and not (ea <= sb or eb <= sa):
