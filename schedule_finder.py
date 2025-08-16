@@ -50,11 +50,7 @@ def generate_schedules_for_chosen_courses(
         picked: List[Dict[str, Any]] = []
         for sec in course["sections"]:
             if sec["CRN"] in wanted:
-                clone = dict(sec)                     # leave original intact
-                clone["times"] = [
-                    [mt["day"], mt["start"], mt["end"]] for mt in sec["MeetingTime"]
-                ]
-                picked.append(clone)
+                picked.append(sec)
 
         per_course.append((name, picked))
 
